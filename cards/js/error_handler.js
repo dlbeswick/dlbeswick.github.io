@@ -1,0 +1,29 @@
+/*
+ * Copyright (c) 2021 David Beswick.
+ *
+ * This file is part of cards-mp
+ * (see https://github.com/dlbeswick/cards-mp).
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+import * as dom from "./dom.js";
+export default function errorHandler(message, source, lineno, colno, error, showAlert = true) {
+    if (showAlert)
+        alert(message);
+    dom.demandById("error").style.display = "block";
+    dom.demandById("error").innerHTML = message + "<br/>" + "Line: " + lineno + "<br/>" + source;
+    console.error(message);
+    return true;
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZXJyb3JfaGFuZGxlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3RzL2Vycm9yX2hhbmRsZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7Ozs7Ozs7Ozs7Ozs7OztHQWtCRztBQUNILE9BQU8sS0FBSyxHQUFHLE1BQU0sVUFBVSxDQUFBO0FBRS9CLE1BQU0sQ0FBQyxPQUFPLFVBQVUsWUFBWSxDQUFDLE9BQVcsRUFBRSxNQUFXLEVBQUUsTUFBVyxFQUFFLEtBQVUsRUFBRSxLQUFVLEVBQUUsU0FBUyxHQUFDLElBQUk7SUFDaEgsSUFBSSxTQUFTO1FBQ1gsS0FBSyxDQUFDLE9BQU8sQ0FBQyxDQUFBO0lBQ2hCLEdBQUcsQ0FBQyxVQUFVLENBQUMsT0FBTyxDQUFDLENBQUMsS0FBSyxDQUFDLE9BQU8sR0FBRyxPQUFPLENBQUE7SUFDL0MsR0FBRyxDQUFDLFVBQVUsQ0FBQyxPQUFPLENBQUMsQ0FBQyxTQUFTLEdBQUcsT0FBTyxHQUFHLE9BQU8sR0FBRyxRQUFRLEdBQUcsTUFBTSxHQUFHLE9BQU8sR0FBRyxNQUFNLENBQUE7SUFDNUYsT0FBTyxDQUFDLEtBQUssQ0FBQyxPQUFPLENBQUMsQ0FBQTtJQUN0QixPQUFPLElBQUksQ0FBQTtBQUNiLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyIvKlxuICogQ29weXJpZ2h0IChjKSAyMDIxIERhdmlkIEJlc3dpY2suXG4gKlxuICogVGhpcyBmaWxlIGlzIHBhcnQgb2YgY2FyZHMtbXAgXG4gKiAoc2VlIGh0dHBzOi8vZ2l0aHViLmNvbS9kbGJlc3dpY2svY2FyZHMtbXApLlxuICpcbiAqIFRoaXMgcHJvZ3JhbSBpcyBmcmVlIHNvZnR3YXJlOiB5b3UgY2FuIHJlZGlzdHJpYnV0ZSBpdCBhbmQvb3IgbW9kaWZ5XG4gKiBpdCB1bmRlciB0aGUgdGVybXMgb2YgdGhlIEdOVSBBZmZlcm8gR2VuZXJhbCBQdWJsaWMgTGljZW5zZSBhc1xuICogcHVibGlzaGVkIGJ5IHRoZSBGcmVlIFNvZnR3YXJlIEZvdW5kYXRpb24sIGVpdGhlciB2ZXJzaW9uIDMgb2YgdGhlXG4gKiBMaWNlbnNlLCBvciAoYXQgeW91ciBvcHRpb24pIGFueSBsYXRlciB2ZXJzaW9uLlxuICpcbiAqIFRoaXMgcHJvZ3JhbSBpcyBkaXN0cmlidXRlZCBpbiB0aGUgaG9wZSB0aGF0IGl0IHdpbGwgYmUgdXNlZnVsLFxuICogYnV0IFdJVEhPVVQgQU5ZIFdBUlJBTlRZOyB3aXRob3V0IGV2ZW4gdGhlIGltcGxpZWQgd2FycmFudHkgb2ZcbiAqIE1FUkNIQU5UQUJJTElUWSBvciBGSVRORVNTIEZPUiBBIFBBUlRJQ1VMQVIgUFVSUE9TRS4gIFNlZSB0aGVcbiAqIEdOVSBBZmZlcm8gR2VuZXJhbCBQdWJsaWMgTGljZW5zZSBmb3IgbW9yZSBkZXRhaWxzLlxuICpcbiAqIFlvdSBzaG91bGQgaGF2ZSByZWNlaXZlZCBhIGNvcHkgb2YgdGhlIEdOVSBBZmZlcm8gR2VuZXJhbCBQdWJsaWMgTGljZW5zZVxuICogYWxvbmcgd2l0aCB0aGlzIHByb2dyYW0uIElmIG5vdCwgc2VlIDxodHRwOi8vd3d3LmdudS5vcmcvbGljZW5zZXMvPi5cbiAqL1xuaW1wb3J0ICogYXMgZG9tIGZyb20gXCIuL2RvbS5qc1wiXG5cbmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIGVycm9ySGFuZGxlcihtZXNzYWdlOmFueSwgc291cmNlPzphbnksIGxpbmVubz86YW55LCBjb2xubz86YW55LCBlcnJvcj86YW55LCBzaG93QWxlcnQ9dHJ1ZSkge1xuICBpZiAoc2hvd0FsZXJ0KVxuICAgIGFsZXJ0KG1lc3NhZ2UpXG4gIGRvbS5kZW1hbmRCeUlkKFwiZXJyb3JcIikuc3R5bGUuZGlzcGxheSA9IFwiYmxvY2tcIlxuICBkb20uZGVtYW5kQnlJZChcImVycm9yXCIpLmlubmVySFRNTCA9IG1lc3NhZ2UgKyBcIjxici8+XCIgKyBcIkxpbmU6IFwiICsgbGluZW5vICsgXCI8YnIvPlwiICsgc291cmNlXG4gIGNvbnNvbGUuZXJyb3IobWVzc2FnZSlcbiAgcmV0dXJuIHRydWVcbn1cblxuIl19
