@@ -1,0 +1,145 @@
+body {
+  font-family: arial;
+  margin: 0;
+  padding: none;
+  user-select: none;
+  width: 100dvw;
+}
+
+.emscripten { padding-right: 0; margin-left: auto; margin-right: auto; display: block; }
+div.emscripten { text-align: center; }
+div.emscripten_border { border: 1px solid black; flex: 1; }
+
+.canvas-container {
+  width: 100vw;
+  height: 35vh;
+  display: block;
+}
+
+.canvas-container @media (orientation: landscape) {
+  width: 65vw;
+  height: 100vh;
+  display: inline;
+}
+
+/* the canvas *must not* have any border or padding, or mouse coords will be wrong */
+canvas.emscripten {
+  border: 0px none;
+  background-color: black;
+  max-height: 100%;
+  max-width: 100%;
+  image-rendering: pixelated;
+/*  aspect-ratio: 1.33333; */
+}
+
+#fullscreen {
+  font-size: large;
+}
+
+.spinner {
+  height: 10px;
+  width: 10px;
+  margin: 0;
+  margin-top: 5px;
+  margin-left: 5px;
+  display: inline-block;
+  vertical-align: top;
+
+  -webkit-animation: rotation .8s linear infinite;
+  -moz-animation: rotation .8s linear infinite;
+  -o-animation: rotation .8s linear infinite;
+  animation: rotation 0.8s linear infinite;
+
+  border-left: 2px solid rgb(235, 235, 235);
+  border-right: 2px solid rgb(235, 235, 235);
+  border-bottom: 2px solid rgb(235, 235, 235);
+  border-top: 2px solid rgb(120, 120, 120);
+
+  border-radius: 100%;
+  background-color: rgb(189, 215, 46);
+}
+
+@-webkit-keyframes rotation {
+  from {-webkit-transform: rotate(0deg);}
+  to {-webkit-transform: rotate(360deg);}
+}
+@-moz-keyframes rotation {
+  from {-moz-transform: rotate(0deg);}
+  to {-moz-transform: rotate(360deg);}
+}
+@-o-keyframes rotation {
+  from {-o-transform: rotate(0deg);}
+  to {-o-transform: rotate(360deg);}
+}
+@keyframes rotation {
+  from {transform: rotate(0deg);}
+  to {transform: rotate(360deg);}
+}
+
+#status {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 5px;
+  color: rgb(120, 120, 120);
+}
+
+#progress {
+  height: 20px;
+  width: 300px;
+}
+
+#controls {
+  vertical-align: top;
+  position: fixed;
+}
+
+#output {
+  width: 100vw;
+  height: 65vh;
+  margin: 0 auto;
+  margin-top: 10px;
+  border-left: 0px;
+  border-right: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  display: block;
+  background-color: black;
+  color: white;
+  font-family: 'Lucida Console', Monaco, monospace;
+  font-size: x-small;
+  outline: none;
+  overflow-y: scroll;
+  text-wrap: auto;
+}
+
+#output @media (orientation: landscape) {
+  width: 35vw;
+  height: 100vh;
+}
+
+
+#gamespace {
+  display: flex;
+  align-items: center;
+}
+      
+.gamepad {
+  img {
+    width: 3cm;
+  }
+  touch-action: none;
+  margin-left: 0.5cm;
+}
+
+.gamepad-buttons {
+  img {
+    display: block;
+    width: 1.5cm;
+  }
+      
+  touch-action: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-right: 0.5cm;
+}
