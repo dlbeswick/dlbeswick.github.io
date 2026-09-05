@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0">
+    <!-- <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover"> -->
+    <title>Pope Innocent</title>
+    <link rel="stylesheet" type="text/css" href="app.css">
+  </head>
+  <body>
+   <script type='text/javascript'>
+   function orientAndGoFullscreen() {
+     var f = function() {
+       const c = document.getElementById('canvas');
+       Browser.setCanvasSize(c.width, c.height, true);
+       Browser.requestFullscreen(false, false)
+     };
+     
+     if (screen && screen.orientation) {
+       screen.orientation.lock(screen.orientation.type == 'landscape-primary' ? 'any' : 'landscape-primary').
+         then(f).
+         catch((e) => { console.error(`Failed to set orientation :${e}`); f(); });
+     } else {
+       console.warn("No support for orientation lock");
+       f();
+     }
+   }
+   </script>
+   
+   <span id='controls'>
+      <span hidden=1><input type="checkbox" id="resize">Resize canvas</span>
+      <span hidden=1><input type="checkbox" id="pointerLock">Lock/hide mouse pointer &nbsp;&nbsp;&nbsp;</span>
+
+      <!-- fix seeming Emscripten bug: widthNative and heightNative not set on canvas until Browser.setCanvasSize is set,
+           causing fullscreen button to shrink canvas size to zero. -->                                                         <span><input id="#fullscreen" type="button" value="Fullscreen" onclick="orientAndGoFullscreen()">
+	</span>
+    </span>
+    <div id='loading'>
+      <div class="spinner" id='spinner'></div>
+      <div class="emscripten" id="status">Downloading...</div>
+    </div>
+
+    <div class="emscripten">
+      <progress value="0" max="100" id="progress" hidden=1></progress>
+    </div>
+
+   <div class="emscripten_border canvas-container">
+     <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
+   </div>
+    <pre id="output"></pre>
+
+    <script type='text/javascript'>
+      var statusElement = document.getElementById('status');
+      var progressElement = document.getElementById('progress');
+      var spinnerElement = document.getElementById('spinner');
+      var loadingElement = document.getElementById('loading');
+
+      var Module = {
+        print: (function() {
+          var element = document.getElementById('output');
+          if (element) element.value = ''; // clear browser cache
+          return (...args) => {
+            var text = args.join(' ');
+            console.log(text);
+            if (element) {
+              const shouldScroll =
+                element.scrollTop >= (element.scrollHeight - element.clientHeight) ||
+                element.scrollHeight == element.clientHeight;
+
+              element.innerText += text + "\n";
+
+              if (shouldScroll)
+                element.scrollTop = element.scrollHeight; // focus on bottom
+            }
+          };
+        })(),
+        canvas: (() => {
+          var canvas = document.getElementById('canvas');
+
+          // As a default initial behavior, pop up an alert when webgl context is lost. To make your
+          // application robust, you may want to override this behavior before shipping!
+          // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
+          canvas.addEventListener("webglcontextlost", (e) => { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
+
+          return canvas;
+        })(),
+        onAbort: (what) => {
+          Module.print(what);
+        },
+        setStatus: (text) => {
+          Module.setStatus.last ??= { time: Date.now(), text: '' };
+          if (text === Module.setStatus.last.text) return;
+          console.debug(text);
+          var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+          var now = Date.now();
+          if (m && now - Module.setStatus.last.time < 30) return; // if this is a progress update, skip it if too soon
+          Module.setStatus.last.time = now;
+          Module.setStatus.last.text = text;
+          if (m) {
+            text = m[1];
+            progressElement.value = parseInt(m[2])*100;
+            progressElement.max = parseInt(m[4])*100;
+            progressElement.hidden = false;
+            spinnerElement.hidden = false;
+            loadingElement.hidden = false;
+          } else {
+            progressElement.value = null;
+            progressElement.max = null;
+            progressElement.hidden = true;
+            if (!text) {
+	      spinnerElement.style.display = 'none';
+	      loadingElement.style.display = 'none';
+            }
+          }
+          statusElement.innerHTML = text;
+        },
+        totalDependencies: 0,
+        monitorRunDependencies: (left) => {
+          this.totalDependencies = Math.max(this.totalDependencies, left);
+          Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+        }
+      };
+      Module.setStatus('Downloading...');
+      
+      //Module["forcedAspectRatio"] = 4 / 3;
+      
+      var alerts = 0;
+      
+      window.addEventListener("error", (event) => {
+        // TODO: do not warn on ok events like simulating an infinite loop or exitStatus
+        Module.setStatus('Exception thrown, see JavaScript console');
+        Module.print(event.message);
+        spinnerElement.style.display = 'none';
+        loadingElement.style.display = 'none';
+
+        Module.setStatus = (text) => {
+          if (text) console.error('[post-exception status] ' + text);
+        };
+  
+        // david
+        if (alerts < 10) {
+          window.alert(`Exception: ${event.message}`);
+          console.error(event.message);
+          ++alerts;
+        } else if (alerts == 10) {
+          window.alert("Too many alerts");
+          ++alert;
+        }
+      });
+
+      // david
+      window.addEventListener('unhandledrejection', event => {
+        window.alert(`Exception: ${event.reason.message}`);
+      });
+  </script>
+  
+  <script src="coi-serviceworker.min.js"></script>
+  <script src="openpgp.min.js"></script>
+  <script type='text/javascript'>
+const fetchOrig = window.fetch;
+console.assert(fetchOrig);
+window.fetch = async (...args) => {
+  if (!args[0].endsWith(".wasm"))
+    return fetchOrig(...args);
+
+  const url = args[0] + ".gpg";
+  console.log(url, ...args.slice(1));
+  const response = await fetchOrig(url, ...args.slice(1));
+  if (response.ok) {
+    const encryptedMessage = await openpgp.readMessage({
+      binaryMessage: await response.bytes()
+    });
+    
+    var passphrase = localStorage.getItem("passphrase");
+    if (!passphrase) {
+      passphrase = window.prompt("Enter passphrase");
+    }
+
+    var decrypted;
+    
+    try {
+      decrypted = (await openpgp.decrypt({
+        message: encryptedMessage,
+        passwords: [passphrase],
+        format: 'binary'
+      })).data;
+    } catch (e) {
+      localStorage.setItem("passphrase", "");
+      throw e;
+    }
+
+    localStorage.setItem("passphrase", passphrase);
+    
+    return new Response(
+      decrypted,
+      {
+        headers: { "Content-Type": "application/wasm" },
+        status: response.status,
+        statusText: response.statusText
+      }
+    );
+  } else {
+    return fetchOrig(...args);
+  }
+};
+
+</script>
+      
+      <script async type="text/javascript" src="index.js"></script>
+  </body>
+</html>

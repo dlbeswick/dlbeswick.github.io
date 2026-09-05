@@ -1,0 +1,35 @@
+/*
+ * Copyright (c) 2021 David Beswick.
+ *
+ * This file is part of cards-mp
+ * (see https://github.com/dlbeswick/cards-mp).
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+import errorHandler from "./error_handler.js";
+export function assert(test, message = 'Assertion failed', ...args) {
+    if (!test) {
+        message = [message, ...args.map(JSON.stringify)].join(", ");
+        errorHandler(message, undefined, undefined, undefined, undefined, false);
+        throw new Error(message);
+    }
+}
+export function assertf(test, message, ...args) {
+    if (!test()) {
+        message = message !== null && message !== void 0 ? message : test.toString() + args.map(JSON.stringify).join(", ");
+        errorHandler(message, undefined, undefined, undefined, undefined, false);
+        throw new Error(message);
+    }
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXNzZXJ0LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vdHMvYXNzZXJ0LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBOzs7Ozs7Ozs7Ozs7Ozs7Ozs7R0FrQkc7QUFDSCxPQUFPLFlBQVksTUFBTSxvQkFBb0IsQ0FBQTtBQUU3QyxNQUFNLFVBQVUsTUFBTSxDQUFDLElBQVEsRUFBRSxPQUFPLEdBQUMsa0JBQWtCLEVBQUUsR0FBRyxJQUFRO0lBQ3RFLElBQUksQ0FBQyxJQUFJLEVBQUU7UUFDVCxPQUFPLEdBQUcsQ0FBQyxPQUFPLEVBQUUsR0FBRyxJQUFJLENBQUMsR0FBRyxDQUFDLElBQUksQ0FBQyxTQUFTLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsQ0FBQTtRQUMzRCxZQUFZLENBQUMsT0FBTyxFQUFFLFNBQVMsRUFBRSxTQUFTLEVBQUUsU0FBUyxFQUFFLFNBQVMsRUFBRSxLQUFLLENBQUMsQ0FBQTtRQUN4RSxNQUFNLElBQUksS0FBSyxDQUFDLE9BQU8sQ0FBQyxDQUFBO0tBQ3pCO0FBQ0gsQ0FBQztBQUVELE1BQU0sVUFBVSxPQUFPLENBQUMsSUFBYyxFQUFFLE9BQWUsRUFBRSxHQUFHLElBQVE7SUFDbEUsSUFBSSxDQUFDLElBQUksRUFBRSxFQUFFO1FBQ1gsT0FBTyxHQUFHLE9BQU8sYUFBUCxPQUFPLGNBQVAsT0FBTyxHQUFJLElBQUksQ0FBQyxRQUFRLEVBQUUsR0FBRyxJQUFJLENBQUMsR0FBRyxDQUFDLElBQUksQ0FBQyxTQUFTLENBQUMsQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLENBQUE7UUFDMUUsWUFBWSxDQUFDLE9BQU8sRUFBRSxTQUFTLEVBQUUsU0FBUyxFQUFFLFNBQVMsRUFBRSxTQUFTLEVBQUUsS0FBSyxDQUFDLENBQUE7UUFDeEUsTUFBTSxJQUFJLEtBQUssQ0FBQyxPQUFPLENBQUMsQ0FBQTtLQUN6QjtBQUNILENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyIvKlxuICogQ29weXJpZ2h0IChjKSAyMDIxIERhdmlkIEJlc3dpY2suXG4gKlxuICogVGhpcyBmaWxlIGlzIHBhcnQgb2YgY2FyZHMtbXAgXG4gKiAoc2VlIGh0dHBzOi8vZ2l0aHViLmNvbS9kbGJlc3dpY2svY2FyZHMtbXApLlxuICpcbiAqIFRoaXMgcHJvZ3JhbSBpcyBmcmVlIHNvZnR3YXJlOiB5b3UgY2FuIHJlZGlzdHJpYnV0ZSBpdCBhbmQvb3IgbW9kaWZ5XG4gKiBpdCB1bmRlciB0aGUgdGVybXMgb2YgdGhlIEdOVSBBZmZlcm8gR2VuZXJhbCBQdWJsaWMgTGljZW5zZSBhc1xuICogcHVibGlzaGVkIGJ5IHRoZSBGcmVlIFNvZnR3YXJlIEZvdW5kYXRpb24sIGVpdGhlciB2ZXJzaW9uIDMgb2YgdGhlXG4gKiBMaWNlbnNlLCBvciAoYXQgeW91ciBvcHRpb24pIGFueSBsYXRlciB2ZXJzaW9uLlxuICpcbiAqIFRoaXMgcHJvZ3JhbSBpcyBkaXN0cmlidXRlZCBpbiB0aGUgaG9wZSB0aGF0IGl0IHdpbGwgYmUgdXNlZnVsLFxuICogYnV0IFdJVEhPVVQgQU5ZIFdBUlJBTlRZOyB3aXRob3V0IGV2ZW4gdGhlIGltcGxpZWQgd2FycmFudHkgb2ZcbiAqIE1FUkNIQU5UQUJJTElUWSBvciBGSVRORVNTIEZPUiBBIFBBUlRJQ1VMQVIgUFVSUE9TRS4gIFNlZSB0aGVcbiAqIEdOVSBBZmZlcm8gR2VuZXJhbCBQdWJsaWMgTGljZW5zZSBmb3IgbW9yZSBkZXRhaWxzLlxuICpcbiAqIFlvdSBzaG91bGQgaGF2ZSByZWNlaXZlZCBhIGNvcHkgb2YgdGhlIEdOVSBBZmZlcm8gR2VuZXJhbCBQdWJsaWMgTGljZW5zZVxuICogYWxvbmcgd2l0aCB0aGlzIHByb2dyYW0uIElmIG5vdCwgc2VlIDxodHRwOi8vd3d3LmdudS5vcmcvbGljZW5zZXMvPi5cbiAqL1xuaW1wb3J0IGVycm9ySGFuZGxlciBmcm9tIFwiLi9lcnJvcl9oYW5kbGVyLmpzXCJcblxuZXhwb3J0IGZ1bmN0aW9uIGFzc2VydCh0ZXN0OmFueSwgbWVzc2FnZT0nQXNzZXJ0aW9uIGZhaWxlZCcsIC4uLmFyZ3M6YW55KTogYXNzZXJ0cyB0ZXN0IHtcbiAgaWYgKCF0ZXN0KSB7XG4gICAgbWVzc2FnZSA9IFttZXNzYWdlLCAuLi5hcmdzLm1hcChKU09OLnN0cmluZ2lmeSldLmpvaW4oXCIsIFwiKVxuICAgIGVycm9ySGFuZGxlcihtZXNzYWdlLCB1bmRlZmluZWQsIHVuZGVmaW5lZCwgdW5kZWZpbmVkLCB1bmRlZmluZWQsIGZhbHNlKVxuICAgIHRocm93IG5ldyBFcnJvcihtZXNzYWdlKVxuICB9XG59XG5cbmV4cG9ydCBmdW5jdGlvbiBhc3NlcnRmKHRlc3Q6KCkgPT4gYW55LCBtZXNzYWdlPzpzdHJpbmcsIC4uLmFyZ3M6YW55KTp2b2lkIHtcbiAgaWYgKCF0ZXN0KCkpIHtcbiAgICBtZXNzYWdlID0gbWVzc2FnZSA/PyB0ZXN0LnRvU3RyaW5nKCkgKyBhcmdzLm1hcChKU09OLnN0cmluZ2lmeSkuam9pbihcIiwgXCIpXG4gICAgZXJyb3JIYW5kbGVyKG1lc3NhZ2UsIHVuZGVmaW5lZCwgdW5kZWZpbmVkLCB1bmRlZmluZWQsIHVuZGVmaW5lZCwgZmFsc2UpXG4gICAgdGhyb3cgbmV3IEVycm9yKG1lc3NhZ2UpXG4gIH1cbn1cblxuIl19
